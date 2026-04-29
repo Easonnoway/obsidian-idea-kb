@@ -1,0 +1,21 @@
+{
+  "interfaceFontSize": 14,
+  "legacyEditor": false,
+  "readableLineLength": true,
+  "defaultViewMode": "source",
+  "newFileLocation": "folder",
+  "newFileFolderPath": "ideas",
+  "attachmentFolderPath": "attachments",
+  "showUnsupportedFiles": true,
+  "showLineNumber": false,
+  "strictLineBreaks": true,
+  "useMarkdownLinks": false,
+  "showFrontmatter": true,
+  "promptDelete": true,
+  "alwaysUpdateLinks": true,
+  "spellcheck": true,
+  "spellcheckLanguages": [
+    "en-US",
+    "zh-CN"
+  ]
+}
