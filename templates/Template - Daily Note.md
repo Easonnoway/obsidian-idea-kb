@@ -7,14 +7,13 @@ tags:
 
 # {{date}}
 
-## 今日工作
+## Today's Work
 
 
 
-## 进展记录
+## Progress Log
 
 
 
-## 明日计划
-
+## Tomorrow's Plan
 

@@ -10,47 +10,47 @@ cssclasses:
 
 # Dashboard
 
-> Idea Knowledge Base 全局看板
+> Idea Knowledge Base — Global Overview
 
 ---
 
-## 统计概览
+## Overview
 
 > [!even-columns]
 >
->> [!stat] 💡 想法
+>> [!stat] 💡 Ideas
 >> 0
 >
->> [!stat] 📚 文献
+>> [!stat] 📚 Literature
 >> 0
 >
->> [!stat] 🔧 方法
+>> [!stat] 🔧 Methods
 >> 0
 >
->> [!stat] 🔍 调研中
+>> [!stat] 🔍 Researching
 >> 0
 
 ---
 
-## 活跃想法
+## Active Ideas
 
-<!-- Claude 创建想法后自动填充 -->
-
----
-
-## 文献库
-
-| 论文 | 作者 | 年份 | 来源 | 关联想法 |
-|------|------|------|------|----------|
-| <!-- 添加文献后自动填充 --> | | | | |
+<!-- Auto-filled when Claude creates an idea note -->
 
 ---
 
-## 快速链接
+## Literature
 
-| 链接 | 说明 |
-|------|------|
-| [[Home\|🏠 首页]] | 知识库首页 |
-| [[Atlas - Idea 看板]] | 想法状态看板 |
-| [[Atlas - 文献地图]] | 文献索引 |
-| [[Atlas - 方法库]] | 方法笔记索引 |
+| Paper | Author | Year | Venue | Related Idea |
+|-------|--------|------|-------|-------------|
+| <!-- Auto-filled after adding literature --> | | | | |
+
+---
+
+## Quick Links
+
+| Link | Description |
+|------|-------------|
+| [[Home\|🏠 Home]] | Vault homepage |
+| [[Atlas - Ideas]] | Idea status board |
+| [[Atlas - Literature]] | Literature index |
+| [[Atlas - Methods]] | Method index |

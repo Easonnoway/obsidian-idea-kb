@@ -2,79 +2,78 @@
 title: "{{title}}"
 created: {{date}}
 updated: {{date}}
-status: "💡 灵感"
+status: "💡 Spark"
 cssclasses:
   - idea-note
 tags:
   - idea
-  - 待分类
 ---
 
 # {{title}}
 
-## 研究问题
+## Research Question
 
-> 用一句话描述你想解决的核心问题：
+> Describe the core problem you want to solve in one sentence:
 
-## 动机与背景
+## Motivation & Background
 
-- 为什么这个问题重要？
-- 现有方法的局限是什么？
+- Why is this problem important?
+- What are the limitations of existing approaches?
 
-## 核心创新点
+## Core Innovation
 
 1.
 
-## 相关工作
+## Related Work
 
-| 论文 | 核心方法 | 与本idea的关系 |
-|------|----------|---------------|
-|      |          |               |
+| Paper | Core Method | Relation to This Idea |
+|-------|-------------|----------------------|
+|       |             |                      |
 
-## 初步方案
+## Preliminary Approach
 
-### 方法概述
+### Method Overview
 
 
 
-### 技术路线
+### Technical Pipeline
 
 ```mermaid
 flowchart TD
-    A[输入] --> B[模块1]
-    B --> C[模块2]
-    C --> D[输出]
+    A[Input] --> B[Module 1]
+    B --> C[Module 2]
+    C --> D[Output]
 ```
 
-## 预期实验
+## Expected Experiments
 
-- **数据集**：
-- **基线方法**：
-- **评价指标**：
-- **预期结果**：
+- **Datasets**:
+- **Baselines**:
+- **Metrics**:
+- **Expected Results**:
 
-## 可行性分析
+## Feasibility Analysis
 
-| 维度 | 评估 | 备注 |
-|------|------|------|
-| 数据可获得性 | ⬜ | |
-| 计算资源 | ⬜ | |
-| 技术难度 | ⬜ | |
-| 新颖性 | ⬜ | |
+| Dimension | Assessment | Notes |
+|-----------|------------|-------|
+| Data Availability | ⬜ | |
+| Compute Resources | ⬜ | |
+| Technical Difficulty | ⬜ | |
+| Novelty | ⬜ | |
 
-> [!warning] 风险与应对
+> [!warning] Risks & Mitigations
 >
-> | 风险 | 概率 | 应对策略 |
-> |------|------|----------|
-> |      |      |          |
+> | Risk | Probability | Mitigation |
+> |------|-------------|------------|
+> |      |             |            |
 
-## 目标期刊/会议
+## Target Venue
 
 -
 
-> [!tip] 下一步行动
+> [!tip] Next Steps
 > - [ ]
 
-## 参考文献
+## References
 
 -

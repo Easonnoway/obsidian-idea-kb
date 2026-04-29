@@ -1,5 +1,5 @@
 ---
-created: 2026-04-29
+created: 2026-04-30
 updated: 2026-04-30
 tags:
   - moc
@@ -9,54 +9,54 @@ cssclasses:
 ---
 
 > [!hero] Idea Knowledge Base
-> 学术研究想法管理库 — 从灵感萌芽到论文发表
+> Academic research idea management — from spark to publication
 
 ---
 
-## 快速入口
+## Quick Access
 
 > [!even-columns]
 >
 >> [!nav-card] [[Dashboard]]
->> 全局看板
+>> Global Overview
 >
->> [!nav-card] [[Atlas - Idea 看板]]
->> 想法状态
+>> [!nav-card] [[Atlas - Ideas]]
+>> Idea Status
 >
->> [!nav-card] [[Atlas - 文献地图]]
->> 文献索引
+>> [!nav-card] [[Atlas - Literature]]
+>> Literature Index
 >
->> [!nav-card] [[Atlas - 方法库]]
->> 方法索引
+>> [!nav-card] [[Atlas - Methods]]
+>> Method Index
 
 ---
 
-## 状态说明
+## Status Guide
 
 > [!even-columns]
 >
->> [!lifecycle] 💡 灵感
->> 刚冒出的想法，尚未深入
+>> [!lifecycle] 💡 Spark
+>> Fresh idea, not yet explored
 >
->> [!lifecycle] 🔍 调研中
->> 正在做文献调研和可行性分析
+>> [!lifecycle] 🔍 Researching
+>> Literature survey and feasibility analysis
 >
->> [!lifecycle] 📝 撰写中
->> 正在撰写论文
+>> [!lifecycle] 📝 Writing
+>> Paper draft in progress
 >
->> [!lifecycle] 🔄 实验中
->> 正在跑实验验证
+>> [!lifecycle] 🔄 Experimenting
+>> Running experiments
 >
->> [!lifecycle] ✅ 已发表
->> 论文已发表
+>> [!lifecycle] ✅ Published
+>> Paper accepted
 >
->> [!lifecycle] 🗑 已放弃
->> 放弃的想法（保留记录）
+>> [!lifecycle] 🗑 Abandoned
+>> Dropped idea (kept for reference)
 
 ---
 
-## 快捷操作
+## Quick Actions
 
-- **新建想法**：使用 `Template - Idea` 模板
-- **记录文献**：使用 `Template - Literature` 模板
-- **记录方法**：使用 `Template - Method` 模板
+- **New Idea**: Use `Template - Idea` template
+- **New Literature Note**: Use `Template - Literature` template
+- **New Method Note**: Use `Template - Method` template
