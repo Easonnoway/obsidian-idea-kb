@@ -1,0 +1,763 @@
+/* ================================================================
+   Idea KB — Glass Aurora Design System
+   Techniques: glassmorphism, gradient borders, aurora text,
+   animated conic borders, multi-layer shadows, pseudo-elements
+   Inspired by: Volcanic Glass, AnuPpuccin, Kepano, breezy-codes
+   ================================================================ */
+
+/* ---- 1. Design Tokens ---- */
+
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+:root {
+  /* Brand colors (RGB channels for alpha compositing) */
+  --vault-accent: 123, 108, 217;
+  --idea-color: 245, 158, 11;
+  --lit-color: 59, 130, 246;
+  --method-color: 16, 185, 129;
+  --atlas-color: 123, 108, 217;
+  --danger: 239, 68, 68;
+  --warning: 245, 158, 11;
+  --success: 16, 185, 129;
+
+  /* Glass system */
+  --glass-bg: rgba(128, 128, 128, 0.06);
+  --glass-bg-strong: rgba(128, 128, 128, 0.10);
+  --glass-border: rgba(128, 128, 128, 0.12);
+  --glass-blur: blur(14px);
+  --glass-blur-heavy: blur(24px);
+
+  /* Shadow system (multi-layer for depth) */
+  --shadow-sm:
+    0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md:
+    0 1px 2px rgba(0, 0, 0, 0.03),
+    0 4px 16px rgba(0, 0, 0, 0.06);
+  --shadow-lg:
+    0 2px 4px rgba(0, 0, 0, 0.03),
+    0 8px 24px rgba(0, 0, 0, 0.07),
+    0 20px 48px rgba(0, 0, 0, 0.04);
+  --shadow-glow-accent: 0 0 24px rgba(var(--vault-accent), 0.12);
+  --shadow-glow-idea: 0 0 24px rgba(var(--idea-color), 0.12);
+  --shadow-glow-lit: 0 0 24px rgba(var(--lit-color), 0.12);
+
+  /* Easing */
+  --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Radius */
+  --radius-card: 14px;
+  --radius-pill: 8px;
+}
+
+
+/* ================================================================
+   2. PAGE LAYOUT CLASSES
+   ================================================================ */
+
+/* Dashboard — full width with ambient aurora */
+.dashboard .markdown-preview-view {
+  background:
+    radial-gradient(ellipse at 15% 30%, rgba(var(--vault-accent), 0.025) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 20%, rgba(var(--lit-color), 0.020) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 90%, rgba(var(--idea-color), 0.015) 0%, transparent 50%);
+}
+.dashboard {
+  max-width: 100% !important;
+}
+.dashboard .cm-sizer,
+.dashboard .markdown-sizer {
+  max-width: 100% !important;
+}
+
+/* Idea note — wide with warm accent */
+.idea-note .markdown-preview-view {
+  background:
+    radial-gradient(ellipse at 10% 40%, rgba(var(--idea-color), 0.015) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 80%, rgba(var(--vault-accent), 0.010) 0%, transparent 50%);
+}
+.idea-note {
+  max-width: 900px !important;
+}
+.idea-note .cm-sizer,
+.idea-note .markdown-sizer {
+  max-width: 900px !important;
+}
+
+/* Literature note — comfortable with cool accent */
+.lit-note .markdown-preview-view {
+  background:
+    radial-gradient(ellipse at 10% 40%, rgba(var(--lit-color), 0.015) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 80%, rgba(var(--vault-accent), 0.010) 0%, transparent 50%);
+}
+.lit-note {
+  max-width: 820px !important;
+}
+.lit-note .cm-sizer,
+.lit-note .markdown-sizer {
+  max-width: 820px !important;
+}
+
+
+/* ================================================================
+   3. HEADING DECORATIONS
+   ================================================================ */
+
+/* h2 gradient underline (dashboard — purple to blue) */
+.dashboard h2 {
+  margin-top: 2em;
+  padding-bottom: 0.3em;
+  border-bottom: none;
+}
+.dashboard h2::after {
+  content: "";
+  display: block;
+  height: 3px;
+  margin-top: 0.4em;
+  border-radius: 2px;
+  background: linear-gradient(90deg,
+    rgba(var(--vault-accent), 0.5),
+    rgba(var(--lit-color), 0.3),
+    transparent);
+}
+
+/* h2 gradient underline (idea — orange to amber) */
+.idea-note h2 {
+  border-left: 3px solid rgba(var(--idea-color), 0.5);
+  padding-left: 12px;
+  margin-top: 1.8em;
+  border-bottom: none;
+}
+.idea-note h2::after {
+  content: "";
+  display: block;
+  height: 3px;
+  margin-top: 0.3em;
+  border-radius: 2px;
+  background: linear-gradient(90deg,
+    rgba(var(--idea-color), 0.5),
+    rgba(var(--warning), 0.25),
+    transparent);
+}
+
+/* h2 gradient underline (literature — blue to purple) */
+.lit-note h2 {
+  border-left: 3px solid rgba(var(--lit-color), 0.5);
+  padding-left: 12px;
+  margin-top: 1.8em;
+  border-bottom: none;
+}
+.lit-note h2::after {
+  content: "";
+  display: block;
+  height: 3px;
+  margin-top: 0.3em;
+  border-radius: 2px;
+  background: linear-gradient(90deg,
+    rgba(var(--lit-color), 0.5),
+    rgba(var(--vault-accent), 0.25),
+    transparent);
+}
+
+
+/* ================================================================
+   4. GRADIENT HORIZONTAL RULES
+   ================================================================ */
+
+.dashboard hr,
+.idea-note hr,
+.lit-note hr {
+  border: none;
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(var(--vault-accent), 0.25),
+    rgba(var(--lit-color), 0.15),
+    transparent);
+  margin: 2em 0;
+}
+
+
+/* ================================================================
+   5. EVEN-COLUMNS (Glass Grid)
+   ================================================================ */
+
+.callout[data-callout="even-columns"] {
+  padding: 0;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.callout[data-callout="even-columns"] > .callout-title {
+  display: none;
+}
+.callout[data-callout="even-columns"] .callout-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 12px;
+  padding: 0;
+}
+
+
+/* ================================================================
+   6. STAT CALLOUT — Aurora Glass Card
+   ================================================================ */
+
+.callout[data-callout="stat"] {
+  --callout-color: var(--vault-accent);
+  position: relative;
+  background: var(--glass-bg-strong) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-card);
+  box-shadow:
+    var(--shadow-md),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  padding: 14px 18px;
+  margin: 0;
+  text-align: center;
+  overflow: hidden;
+  transition: var(--transition-smooth);
+}
+
+/* Gradient border via mask-composite */
+.callout[data-callout="stat"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: linear-gradient(135deg,
+    rgba(var(--vault-accent), 0.7),
+    rgba(var(--idea-color), 0.5),
+    rgba(var(--lit-color), 0.7));
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+}
+
+/* Aurora gradient number */
+.callout[data-callout="stat"] .callout-title {
+  font-size: 0.78em;
+  font-weight: 600;
+  opacity: 0.65;
+  padding: 0 0 2px 0;
+  position: relative;
+  z-index: 1;
+}
+.callout[data-callout="stat"] .callout-content {
+  font-size: 2.4em;
+  font-weight: 800;
+  background: linear-gradient(135deg,
+    rgba(var(--vault-accent), 1),
+    rgba(var(--idea-color), 0.85),
+    rgba(var(--lit-color), 1));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  padding: 0;
+  line-height: 1.2;
+  position: relative;
+  z-index: 1;
+}
+.callout[data-callout="stat"]:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow:
+    var(--shadow-lg),
+    var(--shadow-glow-accent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+
+/* ================================================================
+   7. IDEA-CARD CALLOUT — Glass + Gradient Accent
+   ================================================================ */
+
+.callout[data-callout="idea-card"] {
+  --callout-color: var(--idea-color);
+  position: relative;
+  background: var(--glass-bg-strong) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid rgba(var(--idea-color), 0.12);
+  border-radius: var(--radius-card);
+  box-shadow:
+    var(--shadow-md),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition: var(--transition-smooth);
+}
+
+/* Gradient left accent bar */
+.callout[data-callout="idea-card"]::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg,
+    rgba(var(--idea-color), 0.9),
+    rgba(var(--danger), 0.6));
+  border-radius: var(--radius-card) 0 0 var(--radius-card);
+}
+
+.callout[data-callout="idea-card"] .callout-title {
+  font-size: 1.05em;
+  font-weight: 600;
+  padding-bottom: 4px;
+}
+.callout[data-callout="idea-card"] .callout-content {
+  font-size: 0.88em;
+  line-height: 1.65;
+  padding-top: 4px;
+}
+
+/* Hover: lift + glow */
+.callout[data-callout="idea-card"]:hover {
+  transform: translateY(-3px) scale(1.005);
+  box-shadow:
+    var(--shadow-lg),
+    var(--shadow-glow-idea),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  border-color: rgba(var(--idea-color), 0.25);
+}
+
+
+/* ================================================================
+   8. NAV-CARD CALLOUT — Glass + Rotating Gradient Border
+   ================================================================ */
+
+.callout[data-callout="nav-card"] {
+  --callout-color: var(--atlas-color);
+  position: relative;
+  background: var(--glass-bg-strong) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-card);
+  box-shadow:
+    var(--shadow-md),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  padding: 16px 18px;
+  margin: 0;
+  text-align: center;
+  overflow: hidden;
+  transition: var(--transition-smooth);
+}
+
+/* Animated conic gradient border (appears on hover) */
+.callout[data-callout="nav-card"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--angle, 0deg),
+    rgba(var(--vault-accent), 0.8),
+    transparent 30%,
+    rgba(var(--lit-color), 0.6),
+    transparent 60%,
+    rgba(var(--idea-color), 0.5),
+    transparent 90%,
+    rgba(var(--vault-accent), 0.8));
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  animation: rotate-border 4s linear infinite;
+}
+@keyframes rotate-border {
+  to { --angle: 360deg; }
+}
+
+.callout[data-callout="nav-card"] .callout-title {
+  font-size: 1em;
+  font-weight: 600;
+  padding-bottom: 2px;
+}
+.callout[data-callout="nav-card"] .callout-content {
+  font-size: 0.82em;
+  opacity: 0.55;
+  padding: 0;
+}
+
+/* Hover: show border + lift */
+.callout[data-callout="nav-card"]:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow:
+    var(--shadow-lg),
+    var(--shadow-glow-accent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  border-color: transparent;
+}
+.callout[data-callout="nav-card"]:hover::after {
+  opacity: 1;
+}
+
+
+/* ================================================================
+   9. HERO CALLOUT — Gradient BG + Aurora Title
+   ================================================================ */
+
+.callout[data-callout="hero"] {
+  --callout-color: var(--vault-accent);
+  background: linear-gradient(135deg,
+    rgba(var(--vault-accent), 0.10),
+    rgba(var(--lit-color), 0.06)) !important;
+  border: none !important;
+  border-radius: 18px;
+  padding: 2em;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+/* Subtle light overlay */
+.callout[data-callout="hero"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 25% 50%,
+    rgba(255, 255, 255, 0.04),
+    transparent 70%);
+  pointer-events: none;
+}
+/* Gradient title text */
+.callout[data-callout="hero"] .callout-title {
+  font-size: 1.6em;
+  font-weight: 700;
+  background: linear-gradient(135deg,
+    rgba(var(--vault-accent), 1),
+    rgba(var(--lit-color), 0.85));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  padding-bottom: 4px;
+}
+.callout[data-callout="hero"] .callout-content {
+  opacity: 0.6;
+  font-size: 0.95em;
+}
+
+
+/* ================================================================
+   10. LIFECYCLE CALLOUT — Glass Status Cards
+   ================================================================ */
+
+.callout[data-callout="lifecycle"] {
+  --callout-color: 100, 100, 100;
+  background: var(--glass-bg) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-card);
+  box-shadow:
+    var(--shadow-sm),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  padding: 12px 16px;
+  margin: 0;
+  transition: var(--transition-smooth);
+}
+.callout[data-callout="lifecycle"] .callout-title {
+  font-size: 0.9em;
+  font-weight: 600;
+}
+.callout[data-callout="lifecycle"] .callout-content {
+  font-size: 0.82em;
+  opacity: 0.55;
+  padding: 0;
+}
+.callout[data-callout="lifecycle"]:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    var(--shadow-md),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+
+/* ================================================================
+   11. SPARK CALLOUT — Amber Glow
+   ================================================================ */
+
+.callout[data-callout="spark"] {
+  --callout-color: var(--idea-color);
+  background: rgba(var(--idea-color), 0.05) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid rgba(var(--idea-color), 0.12);
+  border-radius: var(--radius-card);
+  box-shadow:
+    var(--shadow-sm),
+    0 0 16px rgba(var(--idea-color), 0.06);
+  padding: 14px 18px;
+  transition: var(--transition-smooth);
+}
+.callout[data-callout="spark"]:hover {
+  box-shadow:
+    var(--shadow-md),
+    0 0 28px rgba(var(--idea-color), 0.12);
+}
+
+
+/* ================================================================
+   12. STATUS-HEADER CALLOUT
+   ================================================================ */
+
+.callout[data-callout="status-header"] {
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  border: none;
+  margin-bottom: 6px;
+  background: var(--glass-bg-strong) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-sm);
+}
+.callout[data-callout="status-header"] .callout-title {
+  font-size: 0.9em;
+  font-weight: 600;
+}
+.callout[data-callout="status-header"] .callout-content {
+  display: none;
+}
+
+
+/* ================================================================
+   13. GENERIC CALLOUT ENHANCEMENTS
+   ================================================================ */
+
+/* Dashboard callouts: glass base */
+.dashboard .callout {
+  border-radius: var(--radius-card);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow:
+    var(--shadow-sm),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition: var(--transition-smooth);
+}
+.dashboard .callout:hover {
+  box-shadow:
+    var(--shadow-md),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Competition callouts */
+.callout[data-callout="compete"] {
+  --callout-color: var(--danger);
+  background: rgba(var(--danger), 0.04) !important;
+  border-color: rgba(var(--danger), 0.12);
+}
+.callout[data-callout="opportunity"] {
+  --callout-color: var(--success);
+  background: rgba(var(--success), 0.04) !important;
+  border-color: rgba(var(--success), 0.12);
+}
+.callout[data-callout="info-card"] {
+  --callout-color: var(--lit-color);
+  background: rgba(var(--lit-color), 0.04) !important;
+  border-color: rgba(var(--lit-color), 0.12);
+  border-radius: var(--radius-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+/* Native callout glass enhancements for lit/idea notes */
+.idea-note .callout,
+.lit-note .callout {
+  border-radius: var(--radius-card);
+  transition: var(--transition-smooth);
+}
+.idea-note .callout[data-callout="warning"],
+.lit-note .callout[data-callout="warning"] {
+  background: rgba(var(--danger), 0.04) !important;
+  border-color: rgba(var(--danger), 0.12);
+  box-shadow: 0 0 12px rgba(var(--danger), 0.04);
+}
+.idea-note .callout[data-callout="tip"],
+.lit-note .callout[data-callout="tip"] {
+  background: rgba(var(--success), 0.04) !important;
+  border-color: rgba(var(--success), 0.12);
+  box-shadow: 0 0 12px rgba(var(--success), 0.04);
+}
+.idea-note .callout[data-callout="info"],
+.lit-note .callout[data-callout="info"] {
+  background: rgba(var(--lit-color), 0.04) !important;
+  border-color: rgba(var(--lit-color), 0.12);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+.idea-note .callout[data-callout="links"],
+.lit-note .callout[data-callout="links"] {
+  background: rgba(var(--vault-accent), 0.03) !important;
+  border-color: rgba(var(--vault-accent), 0.10);
+}
+
+
+/* ================================================================
+   14. TABLE STYLING — Glass + Gradient Header
+   ================================================================ */
+
+.dashboard table,
+.idea-note table,
+.lit-note table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  font-size: 0.88em;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+/* Gradient header row */
+.dashboard thead tr,
+.idea-note thead tr,
+.lit-note thead tr {
+  background: linear-gradient(135deg,
+    rgba(var(--vault-accent), 0.08),
+    rgba(var(--lit-color), 0.05));
+}
+
+.dashboard th,
+.idea-note th,
+.lit-note th {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.72em;
+  letter-spacing: 0.06em;
+  padding: 12px 14px;
+  text-align: left;
+  white-space: nowrap;
+  border-bottom: 1px solid rgba(var(--vault-accent), 0.12);
+}
+
+.dashboard td,
+.idea-note td,
+.lit-note td {
+  padding: 9px 14px;
+  border-top: 1px solid rgba(128, 128, 128, 0.06);
+}
+
+/* Zebra striping */
+.dashboard tr:nth-child(even) td,
+.idea-note tr:nth-child(even) td,
+.lit-note tr:nth-child(even) td {
+  background: rgba(128, 128, 128, 0.02);
+}
+
+/* Glass hover */
+.dashboard tr:hover td,
+.idea-note tr:hover td,
+.lit-note tr:hover td {
+  background: rgba(var(--vault-accent), 0.04);
+  transition: background 0.15s ease;
+}
+
+
+/* ================================================================
+   15. BLOCKQUOTE STYLING
+   ================================================================ */
+
+.idea-note blockquote,
+.lit-note blockquote {
+  border-left: 3px solid rgba(var(--vault-accent), 0.35);
+  background: var(--glass-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 0 10px 10px 0;
+  padding: 10px 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+
+/* ================================================================
+   16. TAG PILLS — Glass
+   ================================================================ */
+
+.dashboard td a.tag,
+.idea-note td a.tag,
+.lit-note td a.tag {
+  font-size: 0.78em;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--glass-border);
+}
+
+
+/* ================================================================
+   17. MERMAID WRAPPER — Glass Container
+   ================================================================ */
+
+.idea-note .mermaid,
+.lit-note .mermaid,
+.dashboard .mermaid {
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+}
+
+
+/* ================================================================
+   18. CHECKLIST STYLING
+   ================================================================ */
+
+.idea-note .task-list-item,
+.lit-note .task-list-item {
+  padding: 2px 0;
+}
+
+
+/* ================================================================
+   19. REDUCED MOTION
+   ================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .callout[data-callout="nav-card"]::after {
+    animation: none;
+  }
+  .callout[data-callout="stat"]:hover,
+  .callout[data-callout="idea-card"]:hover,
+  .callout[data-callout="nav-card"]:hover,
+  .callout[data-callout="lifecycle"]:hover {
+    transform: none;
+  }
+}

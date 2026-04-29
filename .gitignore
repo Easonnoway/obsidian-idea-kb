@@ -1,0 +1,20 @@
+# Obsidian
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/plugins/
+.DS_Store
+.trash/
+
+# Claude Code
+.claude/
+
+# Personal content (keep directory structure via .gitkeep)
+ideas/*.md
+!ideas/.gitkeep
+literature/*.md
+!literature/.gitkeep
+attachments/*
+!attachments/.gitkeep
+
+# OS
+Thumbs.db
