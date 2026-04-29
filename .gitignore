@@ -16,5 +16,10 @@ literature/*.md
 attachments/*
 !attachments/.gitkeep
 
+# Local Chinese atlas files (user keeps these locally)
+atlas/Atlas - Idea 看板.md
+atlas/Atlas - 文献地图.md
+atlas/Atlas - 方法库.md
+
 # OS
 Thumbs.db

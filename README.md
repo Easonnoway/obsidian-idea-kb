@@ -26,6 +26,8 @@ Give an idea, get a literature review. Automatically.
 
 - [Obsidian](https://obsidian.md)
 - [Claude Code](https://claude.ai/code) (CLI, desktop app, or IDE extension)
+- **Required skills**: [obsidian-skills](https://github.com/kepano/obsidian-skills) — agent skills for Obsidian (Markdown, Bases, JSON Canvas, CLI)
+- **Recommended plugin**: [everything-claude-code](https://github.com/affaan-m/everything-claude-code) — agent harness with skills, security, and research-first development
 - Recommended MCP tools: WebSearch, Exa, Sequential Thinking
 
 ### Setup
@@ -73,7 +75,9 @@ idea-kb/
 ├── atlas/              # Navigation hub
 │   ├── Dashboard.md    # Global overview with stats
 │   ├── Home.md         # Vault homepage
-│   └── ...             # Idea board, literature map, method index
+│   ├── Atlas - Ideas.md
+│   ├── Atlas - Literature.md
+│   └── Atlas - Methods.md
 ├── templates/          # Note templates
 │   ├── Template - Idea.md
 │   ├── Template - Literature.md
@@ -198,6 +202,8 @@ After the session, open Obsidian to review the results. The Dashboard shows your
 
 - [Obsidian](https://obsidian.md)
 - [Claude Code](https://claude.ai/code)（命令行、桌面应用或 IDE 插件）
+- **必须安装**：[obsidian-skills](https://github.com/kepano/obsidian-skills) — Obsidian 智能体技能（Markdown、Bases、JSON Canvas、CLI）
+- **推荐安装**：[everything-claude-code](https://github.com/affaan-m/everything-claude-code) — 智能体增强插件（技能、安全、研究优先开发）
 - 推荐 MCP 工具：WebSearch、Exa、Sequential Thinking
 
 ### 安装
