@@ -21,5 +21,10 @@ atlas/Atlas - Idea 看板.md
 atlas/Atlas - 文献地图.md
 atlas/Atlas - 方法库.md
 
+# Site (generated files)
+site/data.json
+site/embed-data.js
+site/node_modules/
+
 # OS
 Thumbs.db

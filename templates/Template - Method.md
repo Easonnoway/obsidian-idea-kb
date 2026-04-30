@@ -2,49 +2,50 @@
 title: "{{title}}"
 created: {{date}}
 updated: {{date}}
-type: "Method Note"
+type: "方法笔记"
 tags:
   - method
+  - 待分类
 ---
 
 # {{title}}
 
-## Overview
+## 概述
 
-> Describe this method in one sentence:
+> 用一句话描述这个方法：
 
-## Basic Principles
-
-
-
-## Mathematical Formulation
+## 基本原理
 
 
 
-## Pseudocode
+## 数学公式
 
-```
+
+
+## 伪代码
 
 ```
 
-## Pros & Cons
+```
 
-| Pros | Cons |
+## 优缺点
+
+| 优点 | 缺点 |
 |------|------|
 |      |      |
 
-## Use Cases
+## 适用场景
 
 
 
-## Papers Using This Method
-
--
-
-## Code / Tools
+## 使用该方法的论文
 
 -
 
-## Variants & Improvements
+## 代码/工具
+
+-
+
+## 变体与改进
 
 -
