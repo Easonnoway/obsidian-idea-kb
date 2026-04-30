@@ -12,6 +12,7 @@ Give an idea, get a literature review. Automatically.
 
 ## Features
 
+- **Research Landscape Website** — interactive D3.js visualization with 6 views: network graph, papers table, timeline, competition landscape, stats dashboard, and idea detail pages
 - **Idea lifecycle tracking** — 6 states from spark to publication
 - **Automated literature search** — Claude searches arXiv, Google Scholar, top venues
 - **Competitive analysis** — map your idea into research space, find your niche
@@ -83,6 +84,10 @@ idea-kb/
 │   ├── Template - Literature.md
 │   ├── Template - Method.md
 │   └── Template - Daily Note.md
+├── site/               # Research Landscape website
+│   ├── index.html      # Single-page app (605 lines)
+│   ├── export.mjs      # Data export script (vault → JSON)
+│   └── package.json    # Dependencies (gray-matter)
 ├── attachments/        # Embedded images and files
 ├── CLAUDE.md           # Claude Code instructions
 └── README.md           # This file
@@ -178,6 +183,42 @@ Claude will:
 
 After the session, open Obsidian to review the results. The Dashboard shows your idea card with competition landscape, and each literature note links to related papers.
 
+## Research Landscape Website
+
+A single-page interactive website that visualizes your entire research landscape directly from your vault data.
+
+### Setup
+
+```bash
+cd site
+npm install
+node export.mjs    # Generates data.json from vault notes
+open index.html    # Open in any browser (works with file:// protocol)
+```
+
+The site auto-updates — Claude runs `node site/export.mjs` after every session where ideas or literature are modified.
+
+### Views
+
+| View | Description |
+|------|-------------|
+| **Network** | D3.js force-directed graph with idea-literature connections, competition-colored edges, hover highlights, and click-to-detail |
+| **Papers** | Sortable, searchable table of all literature with competition markers, tags, and paper links |
+| **Timeline** | Papers by year with bar chart, filterable by idea |
+| **Landscape** | Per-idea competition cards showing competitors, complementary, and supporting papers |
+| **Stats** | Bento-grid dashboard with overview, yearly distribution, top venues, competition breakdown, tag cloud |
+| **Idea Detail** | Full research plan view with research question, innovation, approach, feasibility, experiments |
+
+### Features
+
+- **Light/dark theme toggle** with localStorage persistence
+- **Idea filtering** — filter Timeline, Papers, and BibTeX export by idea
+- **Competition filtering** — in network view and BibTeX export
+- **BibTeX export** — filtered export with per-paper selection, only real YAML fields (no hallucination)
+- **Paper links** — click through to original paper URLs where available
+- **Network filters** — show/hide by type (ideas, competitors, complementary, supporting)
+- **Responsive detail panel** — slides in for paper/idea details
+
 ---
 
 # 中文
@@ -188,6 +229,7 @@ After the session, open Obsidian to review the results. The Dashboard shows your
 
 ## 特性
 
+- **Research Landscape 网站** — 交互式 D3.js 可视化，6 个视图：网络图谱、论文表格、时间线、竞争格局、统计看板、想法详情页
 - **想法全生命周期追踪** — 从灵感到发表的 6 个状态
 - **自动文献检索** — 搜索 arXiv、Google Scholar、顶级会议
 - **竞争分析** — 将想法映射到研究空间，定位差异化
@@ -257,6 +299,10 @@ idea-kb/
 │   ├── Template - Literature.md
 │   ├── Template - Method.md
 │   └── Template - Daily Note.md
+├── site/               # Research Landscape 网站
+│   ├── index.html      # 单页应用
+│   ├── export.mjs      # 数据导出脚本（vault → JSON）
+│   └── package.json    # 依赖（gray-matter）
 ├── attachments/        # 嵌入的图片和文件
 ├── CLAUDE.md           # Claude Code 项目指令
 └── README.md           # 本文件
@@ -351,6 +397,42 @@ Claude 会自动：
 ```
 
 会话结束后，在 Obsidian 中查看结果。看板显示想法卡片和竞争格局，每篇文献笔记自动链接到相关论文。
+
+## Research Landscape 网站
+
+从 vault 数据自动生成交互式研究景观网站。
+
+### 安装与启动
+
+```bash
+cd site
+npm install
+node export.mjs    # 从 vault 笔记生成 data.json
+open index.html    # 在浏览器中打开（支持 file:// 协议）
+```
+
+网站会自动更新 — Claude 在每次修改 idea 或 literature 后自动运行 `node site/export.mjs`。
+
+### 视图一览
+
+| 视图 | 功能 |
+|------|------|
+| **Network** | D3.js 力导向图，idea-literature 连接，竞争关系着色，悬停高亮，点击查看详情 |
+| **Papers** | 可排序、可搜索的论文表格，竞争标记、标签、论文链接 |
+| **Timeline** | 按年份展示论文分布，柱状图 + 论文列表，支持按 idea 筛选 |
+| **Landscape** | 按 idea 分组的竞争格局卡片：竞争者、互补者、支撑者 |
+| **Stats** | 统计看板：总览、年度分布、热门会议、竞争分布、标签云 |
+| **Idea Detail** | 完整研究计划：研究问题、创新点、方案、可行性、实验设计 |
+
+### 功能亮点
+
+- **浅色/暗色主题切换** — localStorage 记住偏好
+- **Idea 筛选** — Timeline、Papers、BibTeX 导出均可按 idea 过滤
+- **竞争关系筛选** — 网络图和 BibTeX 导出支持按竞争类型过滤
+- **BibTeX 导出** — 可筛选、可手选论文，只使用真实 YAML 字段（不产生幻觉）
+- **论文链接跳转** — 有 URL 的论文可直接点击跳转原文
+- **网络图过滤器** — 按类型（想法、竞争者、互补者、支撑者）显示/隐藏
+- **响应式详情面板** — 点击论文或想法时滑入展示
 
 ## 许可证
 
