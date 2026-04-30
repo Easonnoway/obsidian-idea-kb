@@ -1,0 +1,12 @@
+{
+  "name": "obsidian-idea-kb-site",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "export": "node export.mjs"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3"
+  }
+}

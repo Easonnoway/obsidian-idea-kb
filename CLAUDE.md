@@ -117,6 +117,7 @@ When the user provides a new idea or asks for deeper research:
 3. **Write literature notes**: One file per paper. Use competition markers. Include real paper URLs.
 4. **Update idea note**: Add competitive landscape, differentiate vs. closest competitors, narrative strategy, experimental design.
 5. **Sync Dashboard + Atlas**: Update Dashboard counts/competition/timeline/literature index. Also update `atlas/Atlas - Ideas.md` and `atlas/Atlas - Literature.md` with new entries.
+6. **Regenerate landscape site data**: After ANY modification to files in `ideas/` or `literature/` (create, edit, delete), immediately run `node site/export.mjs` to regenerate `site/data.json` and `site/embed-data.js`. Do NOT defer this to the end of the session — the website must reflect the latest vault state at all times.
 
 ---
 
@@ -140,6 +141,7 @@ Run self-check on **all files modified in this session**:
 6. **Bidirectional links**: For every wikilink `[[B]]` in note A's "Related Papers" section, verify note B's "Related Papers" also contains `[[A]]`. **Method**: for each new/modified note, list all targets in its "Related Papers", then read each target and confirm the back-link exists. Add missing back-links before proceeding.
 7. **Mermaid safety**: No angle brackets (`<>`) in Mermaid node labels — use backtick formatting
 8. **Orphan detection**: New notes are referenced from at least one other note or Dashboard
+9. **Update landscape site**: Run `node site/export.mjs` to regenerate `site/data.json`. If the `site/` directory doesn't exist, skip this step.
 
 **Fix any issue found immediately.** Report the self-check result to the user.
 

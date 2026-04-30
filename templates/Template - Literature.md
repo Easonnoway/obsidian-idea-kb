@@ -2,7 +2,7 @@
 title: "{{title}}"
 created: {{date}}
 updated: {{date}}
-type: "Literature Note"
+type: "文献笔记"
 author: ""
 year: ""
 venue: ""
@@ -14,45 +14,49 @@ tags:
 
 # {{title}}
 
-> [!info] Metadata
+> [!info] 元信息
 >
-> | Field | Content |
-> |-------|---------|
-> | Author | |
-> | Year | |
-> | Venue | |
-> | Paper URL | |
+> | 字段 | 内容 |
+> |------|------|
+> | 作者 | |
+> | 发表年份 | |
+> | 期刊/会议 | |
+> | 论文链接 | |
 
-## One-line Summary
+## 一句话总结
 
 >
 
-## Research Question
+## 研究问题
 
 
 
-## Core Method
+## 核心方法
+
+
+
+## 关键创新点
 
 1.
 2.
 3.
 
-## Key Innovations
+## 实验结果
 
-1.
-2.
-3.
+| 数据集 | 指标 | 本文结果 | SOTA | 提升 |
+|--------|------|----------|------|------|
+|        |      |          |      | |
 
-## Limitations
+## 局限性
 
 -
 
-> [!spark] Insights for My Work
+> [!spark] 对我的启发
 >
-> How does this paper relate to my ideas?
+> 这篇论文对我的想法有什么启发？
 >
 > -
 
-> [!links] Related Papers
+> [!links] 相关论文
 >
 > -
