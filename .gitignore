@@ -1,8 +1,9 @@
 # Obsidian
-.obsidian/workspace.json
-.obsidian/workspace-mobile.json
-.obsidian/plugins/
+.obsidian/
+
+# OS
 .DS_Store
+Thumbs.db
 .trash/
 
 # Claude Code
@@ -15,11 +16,6 @@ literature/*.md
 !literature/.gitkeep
 attachments/*
 !attachments/.gitkeep
-
-# Local Chinese atlas files (user keeps these locally)
-atlas/Atlas - Idea 看板.md
-atlas/Atlas - 文献地图.md
-atlas/Atlas - 方法库.md
 
 # Site (generated files)
 site/data.json
