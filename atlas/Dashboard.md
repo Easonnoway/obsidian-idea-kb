@@ -1,6 +1,6 @@
 ---
 created: 2026-04-29
-updated: 2026-04-30
+updated: 2026-05-05
 tags:
   - dashboard
   - moc
@@ -22,7 +22,7 @@ cssclasses:
 >> 2
 >
 >> [!stat] 📚 文献
->> 26
+>> 30
 >
 >> [!stat] 🔧 方法
 >> 0
@@ -36,9 +36,9 @@ cssclasses:
 
 > [!idea-card] [[Test-Time Compute for Agentic Communication|CommThink]] — 🔍 调研中
 > **方向**：多智能体 / TTS / RL / ToM
-> **新颖性**：⚠️ 中低 | **竞争者**：🔴 LG-TOM (CMU) | **文献**：14 篇
-> **下一步**：精读 LG-TOM、FutureWeaver、M1-32B，明确差异化叙事
-> **更新**：2026-04-29
+> **新颖性**：⚠️ 中等 | **最强竞争者**：🔴 Gricean Norms (AAMAS 2025, 重合度最高) | **文献**：18 篇
+> **下一步**：构造 SFT 数据集，设计 ToM 消融实验，与 FutureWeaver/M1-32B 做对比实验
+> **更新**：2026-05-05
 
 > [!idea-card] [[CrossModal Shield - 跨模态多智能体防火墙与免疫系统|CrossModal Shield]] — 🔍 调研中
 > **方向**：多智能体安全 / 跨模态注入 / A2A 协议 / 扩散净化 / 拓扑水印
@@ -54,7 +54,7 @@ cssclasses:
 
 | 论文 | 作者 | 年份 | 来源 | 关联 Idea |
 |------|------|------|------|----------|
-| 🔴 [[LG-TOM - Language Grounded ToM for Multi-Agent Communication\|LG-TOM]] | Huao Li et al. (CMU) | 2025 | ICLR 2026 sub. | CommThink |
+| 🟡 [[LG-TOM - Language Grounded ToM for Multi-Agent Communication\|LG-TOM]] | Huao Li et al. (CMU) | 2025 | ICLR 2026 sub. | CommThink |
 | [[FutureWeaver - Planning Test-Time Compute for MAS\|FutureWeaver]] | Dongwon Jung et al. | 2025 | arXiv | CommThink |
 | [[M1-32B - Test-Time Scaling of Multi-Agent Collaborative Reasoning\|M1-32B]] | Can Jin et al. | 2025 | arXiv | CommThink |
 | [[TUMIX - Multi-Agent Test-Time Scaling with Tool-Use Mixture\|TUMIX]] | Yongchao Chen et al. | 2025 | arXiv | CommThink |
@@ -68,6 +68,10 @@ cssclasses:
 | [[Few-shot Language Coordination by Modeling ToM\|Few-shot Lang. Coord.]] | — | 2021 | ICML | CommThink |
 | [[DPBench - LLMs Struggle with Simultaneous Coordination\|DPBench]] | Najmul Hasan et al. | 2026 | arXiv | CommThink |
 | [[AgentsNet - Coordination and Collaborative Reasoning in Multi-Agent LLMs\|AgentsNet]] | Luis Müller et al. | 2025 | arXiv | CommThink |
+| 🔴 [[Gricean Norms - Gricean Norms as a Basis for Effective Collaboration\|Gricean Norms]] | Fardin Saad et al. | 2025 | AAMAS 2025 | CommThink |
+| 🟡 [[COMPACT - Communicate Predict Act Evaluating Social Intelligence\|COMPACT]] | Shoresh, Kraus et al. | 2026 | arXiv | CommThink |
+| 🟢 [[MetaMind - Modeling Human Social Thoughts with Metacognitive Multi-Agent Systems\|MetaMind]] | Xuanming Zhang et al. | 2025 | NeurIPS 2025 Spotlight | CommThink |
+| 🟡 [[RUMAD - Reinforcement-Unifying Multi-Agent Debate\|RUMAD]] | Chao Wang et al. | 2026 | arXiv | CommThink |
 
 ### CrossModal Shield 相关
 
@@ -93,6 +97,6 @@ cssclasses:
 | 链接 | 说明 |
 |------|------|
 | [[Home\|🏠 首页]] | 知识库首页 |
-| [[Atlas - Idea 看板]] | Idea 状态看板 |
-| [[Atlas - 文献地图]] | 文献索引 |
-| [[Atlas - 方法库]] | 方法笔记索引 |
+| [[Atlas - Ideas]] | Ideas by status |
+| [[Atlas - Literature]] | Literature index |
+| [[Atlas - Methods]] | Methods index |

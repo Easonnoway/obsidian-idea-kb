@@ -121,6 +121,12 @@ When the user provides a new idea or asks for deeper research:
 
 ---
 
+## Q&A Mode
+
+When the user is **only asking questions** about existing knowledge base content (e.g. "这篇论文讲了什么", "这个方法是什么意思", "帮我解释一下这段内容"), do **NOT** proactively update knowledge base files, Dashboard, or Atlas indexes. Simply answer the question based on existing notes. Only trigger the full research/self-check workflow when the user explicitly asks to create, update, or expand knowledge base content.
+
+---
+
 ## Session Protocol
 
 ### Entry (start of session)
@@ -128,20 +134,16 @@ When the user provides a new idea or asks for deeper research:
 - Check which ideas are active and their latest status
 
 ### Exit (end of session, before responding to user's last message)
-Run self-check on **all files modified in this session**:
+Run `node scripts/healthcheck.mjs` to automatically check for frontmatter issues, broken wikilinks, and Dashboard sync problems. Then manually verify:
 
-1. **Frontmatter integrity**: Every modified `.md` has valid YAML matching its template schema
-2. **Required fields**: Literature notes have `Paper URL`; idea notes have `status`
-3. **Broken wikilinks**: Every `[[Target]]` resolves to an existing file in the vault
-4. **Sync Dashboard** (`atlas/Dashboard.md`): Counts, competition table, timeline, risk assessment, literature index
-5. **Sync Atlas indexes** — new ideas/literature MUST also appear in:
+1. **Sync Atlas indexes** — new ideas/literature MUST also appear in:
    - `atlas/Atlas - Ideas.md` -> add row to the correct status table
    - `atlas/Atlas - Literature.md` -> add row to the literature index table
    - Update `updated` date in both files
-6. **Bidirectional links**: For every wikilink `[[B]]` in note A's "Related Papers" section, verify note B's "Related Papers" also contains `[[A]]`. **Method**: for each new/modified note, list all targets in its "Related Papers", then read each target and confirm the back-link exists. Add missing back-links before proceeding.
-7. **Mermaid safety**: No angle brackets (`<>`) in Mermaid node labels — use backtick formatting
-8. **Orphan detection**: New notes are referenced from at least one other note or Dashboard
-9. **Update landscape site**: Run `node site/export.mjs` to regenerate `site/data.json`. If the `site/` directory doesn't exist, skip this step.
+2. **Bidirectional links**: For every wikilink `[[B]]` in note A's "Related Papers" section, verify note B's "Related Papers" also contains `[[A]]`. **Method**: for each new/modified note, list all targets in its "Related Papers", then read each target and confirm the back-link exists. Add missing back-links before proceeding.
+3. **Mermaid safety**: No angle brackets (`<>`) in Mermaid node labels — use backtick formatting
+4. **Orphan detection**: New notes are referenced from at least one other note or Dashboard
+5. **Update landscape site**: Run `node site/export.mjs` to regenerate `site/data.json`. If the `site/` directory doesn't exist, skip this step.
 
 **Fix any issue found immediately.** Report the self-check result to the user.
 

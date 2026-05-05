@@ -20,14 +20,14 @@ cssclasses:
 >> [!nav-card] [[Dashboard]]
 >> 全局看板
 >
->> [!nav-card] [[Atlas - Idea 看板]]
->> 想法状态
->
->> [!nav-card] [[Atlas - 文献地图]]
->> 文献索引
->
->> [!nav-card] [[Atlas - 方法库]]
->> 方法索引
+>> [!nav-card] [[Atlas - Ideas]]
+>> Ideas by status
+
+>> [!nav-card] [[Atlas - Literature]]
+>> Literature index
+
+>> [!nav-card] [[Atlas - Methods]]
+>> Methods index
 
 ---
 
