@@ -10,7 +10,7 @@ Thumbs.db
 .claude/
 
 # Personal content (keep directory structure via .gitkeep)
-ideas/*.md
+ideas/**/*.md
 !ideas/.gitkeep
 literature/*.md
 !literature/.gitkeep
