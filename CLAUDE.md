@@ -50,11 +50,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Vault Architecture
 
 ```
-ideas/          -> Idea notes, one per idea
-literature/     -> Paper reading notes, one per paper
+ideas/          -> One folder per idea (ShortName/)
+  {ShortName}/  -> Contains:
+    {Full Title}.md          -> Core summary (research question, motivation, innovation, brief approach)
+    {ShortName} - Topic.md   -> Deep-dive sub-documents (created on-demand)
+literature/     -> Paper reading notes, one per paper (flat)
 methods/        -> Research method/technique notes
 atlas/          -> Navigation hub: Dashboard, indexes
-templates/      -> Templates: Idea, Literature, Method, Daily Note
+templates/      -> Templates: Idea, Idea Sub-Document, Literature, Method, Daily Note
 attachments/    -> Embedded images and files
 ```
 
@@ -66,10 +69,17 @@ attachments/    -> Embedded images and files
 
 Every note must conform to its template. On self-check, verify these required fields:
 
-### Idea Note (`ideas/*.md`)
+### Idea Note (`ideas/{ShortName}/{Full Title}.md`)
 - **YAML**: `title`, `created`, `updated`, `status`, `tags`
-- **Required sections**: Research Question, Motivation & Background, Core Innovation, Related Work, Preliminary Approach, Expected Experiments, Feasibility Analysis, Risks & Mitigations, Target Venue, Next Steps, References
-- **Status values**: `Spark` -> `Researching` -> `Writing` -> `Experimenting` -> `Published` / `Abandoned`
+- **Required sections**: Research Question, Motivation & Background, Core Innovation, Related Work (brief table), Preliminary Approach (brief), Status & Next Steps, Target Venue, Deep Dives, References
+- **Status values** (单选): `Spark` (💡 灵感萌芽) -> `Researching` (🔍 调研中) -> `Writing` (✍️ 写作中) -> `Experimenting` (🧪 实验中) -> `Published` (✅ 已发表) / `Abandoned` (❌ 已放弃)
+- **Naming**: Main note keeps its original long title; folder uses short name
+
+### Idea Sub-Document (`ideas/{ShortName}/{ShortName} - *.md`)
+- **YAML**: `title`, `created`, `updated`, `parent` (wikilink to main note), `type` ("Idea Sub-Document"), `tags`
+- **Required sections**: Overview (3-5 line summary with key takeaways), Content, References
+- **Naming**: `{ShortName} - {English Topic Title}.md` (e.g., `CommThink - Benchmark Selection.md`)
+- **Auto-created**: When Claude answers a deep question (>50 lines or distinct topic) about an existing idea
 
 ### Literature Note (`literature/*.md`)
 - **YAML**: `title`, `created`, `updated`, `type` ("Literature Note"), `author`, `year`, `venue`, `tags`
@@ -112,12 +122,17 @@ Spark -> (user provides idea) -> Researching -> (research complete) -> Writing -
 
 When the user provides a new idea or asks for deeper research:
 
+0. **Determine scope**:
+   - New idea: Create folder `ideas/{ShortName}/`, create main note from `Template - Idea.md`
+   - Deep question about existing idea (e.g., "how should I design experiments?", "what benchmarks to use?"):
+     - If the answer would exceed ~50 lines or represents a distinct research topic → create a sub-document in the idea folder
+     - If the answer is brief → update the relevant section in the main note or existing sub-document
 1. **Literature search**: Use WebSearch, Exa (`web_search_exa`, `web_fetch_exa`), sequential thinking. Search arXiv, OpenReview, Google Scholar, top venue proceedings (NeurIPS/ICLR/ICML/ACL/EMNLP/AAAI).
 2. **Competitive analysis**: Map idea into 2D space (optimization target x method). Verify the cell is unoccupied. Rate novelty honestly — downgrade when competitors found.
 3. **Write literature notes**: One file per paper. Use competition markers. Include real paper URLs.
-4. **Update idea note**: Add competitive landscape, differentiate vs. closest competitors, narrative strategy, experimental design.
+4. **Update idea note**: Update the main note's core sections. For substantial new analysis, create or update a sub-document in the idea folder, then add it to the main note's "Deep Dives" table.
 5. **Sync Dashboard + Atlas**: Update Dashboard counts/competition/timeline/literature index. Also update `atlas/Atlas - Ideas.md` and `atlas/Atlas - Literature.md` with new entries.
-6. **Regenerate landscape site data**: After ANY modification to files in `ideas/` or `literature/` (create, edit, delete), immediately run `node site/export.mjs` to regenerate `site/data.json` and `site/embed-data.js`. Do NOT defer this to the end of the session — the website must reflect the latest vault state at all times.
+6. **Regenerate landscape site data**: After ANY modification to files in `ideas/` or `literature/` (create, edit, delete, including sub-folders), immediately run `node site/export.mjs` to regenerate `site/data.json` and `site/embed-data.js`. Do NOT defer this to the end of the session — the website must reflect the latest vault state at all times.
 
 ---
 
@@ -141,9 +156,13 @@ Run `node scripts/healthcheck.mjs` to automatically check for frontmatter issues
    - `atlas/Atlas - Literature.md` -> add row to the literature index table
    - Update `updated` date in both files
 2. **Bidirectional links**: For every wikilink `[[B]]` in note A's "Related Papers" section, verify note B's "Related Papers" also contains `[[A]]`. **Method**: for each new/modified note, list all targets in its "Related Papers", then read each target and confirm the back-link exists. Add missing back-links before proceeding.
-3. **Mermaid safety**: No angle brackets (`<>`) in Mermaid node labels — use backtick formatting
-4. **Orphan detection**: New notes are referenced from at least one other note or Dashboard
-5. **Update landscape site**: Run `node site/export.mjs` to regenerate `site/data.json`. If the `site/` directory doesn't exist, skip this step.
+3. **Sub-document integrity**: For each idea folder:
+   - The main note exists and has all required core sections
+   - Every sub-document in the folder appears in the main note's "Deep Dives" table
+   - Every sub-document's `parent` frontmatter field links to the main note
+4. **Mermaid safety**: No angle brackets (`<>`) in Mermaid node labels — use backtick formatting
+5. **Orphan detection**: New notes are referenced from at least one other note or Dashboard. Sub-documents are referenced from their parent's "Deep Dives" table.
+6. **Update landscape site**: Run `node site/export.mjs` to regenerate `site/data.json`. If the `site/` directory doesn't exist, skip this step.
 
 **Fix any issue found immediately.** Report the self-check result to the user.
 
@@ -164,7 +183,8 @@ Run `node scripts/healthcheck.mjs` to automatically check for frontmatter issues
 ## File Naming
 
 - Literature: `Author Keyword - Short Title.md`
-- Ideas: `Full Descriptive Title.md`
+- Ideas: `ShortName/Full Descriptive Title.md` (main note in folder)
+- Idea Sub-Documents: `ShortName/ShortName - Topic Title.md`
 - Methods: `Method Name.md`
 
 ## Obsidian Config

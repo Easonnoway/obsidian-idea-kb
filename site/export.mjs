@@ -11,6 +11,30 @@ const WIKILINK_RE = /\[\[([^\]|]+?)(?:\|[^\]]+)?\]\]/g;
 const COMPETITION_RE = /[🔴🟡🟢]/;
 const COMPETITION_MAP = { "🔴": "competitor", "🟡": "complementary", "🟢": "supporting" };
 
+function getAllMdFiles(dir) {
+  if (!fs.existsSync(dir)) return [];
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  const files = [];
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...getAllMdFiles(fullPath));
+    } else if (entry.name.endsWith(".md")) {
+      files.push(fullPath);
+    }
+  }
+  return files;
+}
+
+function isSubDocument(filepath) {
+  try {
+    const raw = fs.readFileSync(filepath, "utf-8");
+    return raw.includes('type: "Idea Sub-Document"') || raw.includes("type: Idea Sub-Document");
+  } catch {
+    return false;
+  }
+}
+
 function slugify(filename) {
   const base = filename.replace(/\.md$/, "");
   if (!base) return "";
@@ -124,10 +148,11 @@ function parseLitNote(filepath) {
   }));
 
   const ideaLinks = [];
-  const ideasDir = fs.readdirSync(IDEAS_DIR).filter((f) => f.endsWith(".md"));
-  for (const ideaFile of ideasDir) {
-    const ideaSlug = slugify(ideaFile);
-    if (content.includes(`[[${ideaFile.replace(".md", "")}`)) {
+  const allIdeaFiles = getAllMdFiles(IDEAS_DIR).filter((f) => !isSubDocument(f));
+  for (const ideaFile of allIdeaFiles) {
+    const ideaBasename = path.basename(ideaFile);
+    const ideaSlug = slugify(ideaBasename);
+    if (content.includes(`[[${ideaBasename.replace(".md", "")}`)) {
       ideaLinks.push(ideaSlug);
     }
   }
@@ -154,11 +179,12 @@ function main() {
   const ideaIds = new Set();
   const warnings = [];
 
-  const ideaFiles = fs.readdirSync(IDEAS_DIR).filter((f) => f.endsWith(".md"));
+  const ideaFiles = getAllMdFiles(IDEAS_DIR).filter((f) => !isSubDocument(f));
+  const ideaSubDocs = getAllMdFiles(IDEAS_DIR).filter((f) => isSubDocument(f));
   let researching = 0;
   for (const file of ideaFiles) {
     try {
-      const node = parseIdeaNote(path.join(IDEAS_DIR, file));
+      const node = parseIdeaNote(file);
       nodes.push(node);
       ideaIds.add(node.id);
       if (node.status && (node.status.includes("调研中") || node.status.includes("Researching"))) researching++;
@@ -172,14 +198,58 @@ function main() {
         });
       }
     } catch (err) {
-      warnings.push(`ideas/${file}: ${err.message}`);
+      warnings.push(`${path.relative(VAULT_ROOT, file)}: ${err.message}`);
     }
   }
 
-  const litFiles = fs.readdirSync(LIT_DIR).filter((f) => f.endsWith(".md"));
+  // Attach sub-documents to their parent idea nodes
+  const nodeMap = new Map(nodes.map((n) => [n.id, n]));
+  for (const file of ideaSubDocs) {
+    try {
+      const { frontmatter: fm, content } = parseFile(file);
+      const parentTitle = (fm.parent || "").replace(/^\[\[|\]\]$/g, "");
+      const parentId = slugify(parentTitle + ".md");
+      const parentNode = nodeMap.get(parentId);
+      if (!parentNode) continue;
+
+      const rawTitle = fm.title || path.basename(file, ".md");
+      const topic = rawTitle.includes(" - ") ? rawTitle.split(" - ").slice(1).join(" - ") : rawTitle;
+
+      const overviewSection = extractSection(content, "Overview");
+      const overview = overviewSection ? overviewSection.replace(/^>\s*/gm, "").trim() : "";
+
+      // Collect all section headings, skip Overview/References
+      const headingRe = /^## (.+)$/gm;
+      const headings = [];
+      let hm;
+      while ((hm = headingRe.exec(content)) !== null) {
+        headings.push(hm[1].trim());
+      }
+      const skipNames = new Set(["Overview", "References", "参考文献"]);
+      const bodyParts = [];
+      for (const name of headings) {
+        if (skipNames.has(name)) continue;
+        bodyParts.push(extractSection(content, name).trim());
+      }
+      const bodyContent = bodyParts.filter(Boolean).join("\n\n");
+
+      if (!parentNode.subDocuments) parentNode.subDocuments = [];
+      parentNode.subDocuments.push({
+        id: slugify(path.basename(file)),
+        title: rawTitle,
+        topic,
+        overview,
+        content: bodyContent,
+      });
+    } catch (err) {
+      warnings.push(`${path.relative(VAULT_ROOT, file)}: ${err.message}`);
+    }
+  }
+
+  const litFiles = getAllMdFiles(LIT_DIR);
   for (const file of litFiles) {
     try {
-      const node = parseLitNote(path.join(LIT_DIR, file));
+      const node = parseLitNote(file);
       nodes.push(node);
 
       for (const link of node.edges) {
@@ -190,7 +260,7 @@ function main() {
         });
       }
     } catch (err) {
-      warnings.push(`literature/${file}: ${err.message}`);
+      warnings.push(`${path.relative(VAULT_ROOT, file)}: ${err.message}`);
     }
   }
 

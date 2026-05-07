@@ -14,7 +14,17 @@ const warnings = [];
 
 function getAllMdFiles(dir) {
   if (!fs.existsSync(dir)) return [];
-  return fs.readdirSync(dir).filter((f) => f.endsWith(".md"));
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  const files = [];
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...getAllMdFiles(fullPath));
+    } else if (entry.name.endsWith(".md")) {
+      files.push(fullPath);
+    }
+  }
+  return files;
 }
 
 function parseFrontmatter(raw) {
@@ -36,7 +46,7 @@ function collectAllNoteNames() {
   const names = [];
   for (const dir of [IDEAS_DIR, LIT_DIR, METHODS_DIR, ATLAS_DIR]) {
     for (const f of getAllMdFiles(dir)) {
-      names.push(f.replace(/\.md$/, ""));
+      names.push(path.basename(f, ".md"));
     }
   }
   for (const f of fs.readdirSync(ATTACHMENTS_DIR)) {
@@ -96,8 +106,16 @@ function checkIdeaNote(filepath, filename, allNoteNames) {
     return;
   }
 
-  if (!fm.status) {
-    errors.push(`  ${filename}: missing status in frontmatter`);
+  // Sub-documents have type: "Idea Sub-Document" — check parent instead of status
+  if (fm.type === "Idea Sub-Document") {
+    if (!fm.parent) {
+      errors.push(`  ${filename}: sub-document missing parent in frontmatter`);
+    }
+  } else {
+    // Main idea note — must have status
+    if (!fm.status) {
+      errors.push(`  ${filename}: missing status in frontmatter`);
+    }
   }
 
   for (const target of extractWikilinks(raw)) {
@@ -135,14 +153,14 @@ function main() {
   console.log("--- Literature Notes ---");
   const litFiles = getAllMdFiles(LIT_DIR);
   for (const f of litFiles) {
-    checkLitNote(path.join(LIT_DIR, f), f, allNoteNames);
+    checkLitNote(f, path.basename(f), allNoteNames);
   }
   console.log(`  Checked ${litFiles.length} files`);
 
   console.log("\n--- Idea Notes ---");
   const ideaFiles = getAllMdFiles(IDEAS_DIR);
   for (const f of ideaFiles) {
-    checkIdeaNote(path.join(IDEAS_DIR, f), f, allNoteNames);
+    checkIdeaNote(f, path.basename(f), allNoteNames);
   }
   console.log(`  Checked ${ideaFiles.length} files`);
 

@@ -260,6 +260,17 @@ body{font-family:var(--font-sans);font-size:13px;color:var(--text-primary);backg
 .bib-actions{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .bib-select-btn{background:none;border:none;color:var(--accent);font-size:11px;cursor:pointer;font-family:var(--font-sans);padding:2px 4px}
 .bib-select-btn:hover{text-decoration:underline}
+.ideas-tree{margin-top:4px}
+.it-idea{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:6px;cursor:pointer;font-size:12px;color:var(--text-secondary);transition:background .15s;user-select:none}
+.it-idea:hover{background:var(--bg-hover)}
+.it-idea .it-arrow{font-size:10px;width:12px;text-align:center;transition:transform .2s;flex-shrink:0;color:var(--text-tertiary)}
+.it-idea .it-arrow.open{transform:rotate(90deg)}
+.it-idea .it-title{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.it-idea .it-status{font-size:9px;padding:1px 5px;border-radius:8px;background:var(--accent-dim);color:var(--accent);flex-shrink:0}
+.it-subs{overflow:hidden;max-height:0;transition:max-height .25s ease}
+.it-subs.open{max-height:600px}
+.it-sub{display:block;padding:4px 8px 4px 28px;font-size:11px;color:var(--text-tertiary);cursor:pointer;border-radius:4px;transition:background .15s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.it-sub:hover{background:var(--bg-hover);color:var(--text-secondary)}
 @media(prefers-reduced-motion:reduce){body::before{animation:none}.view,.app-shell,.bento-card{transition:none}}
 </style>
 </head>
@@ -284,6 +295,11 @@ body{font-family:var(--font-sans);font-size:13px;color:var(--text-primary);backg
       <div class="legend-item"><span class="dot" style="background:var(--color-competitor)"></span>Competitor</div>
       <div class="legend-item"><span class="dot" style="background:var(--color-complement)"></span>Complementary</div>
       <div class="legend-item"><span class="dot" style="background:var(--color-supporting)"></span>Supporting</div>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section" id="ideas-tree-section">
+      <div class="sidebar-label">Ideas & Deep Dives</div>
+      <div class="ideas-tree" id="ideas-tree"></div>
     </div>
     <div class="sidebar-bottom">
       <div class="sidebar-divider" style="margin:4px 0"></div>
@@ -322,6 +338,83 @@ const C={idea:'var(--color-idea)',lit:'var(--color-lit)',competitor:'var(--color
 function getCC(){const s=getComputedStyle(document.documentElement);return{idea:s.getPropertyValue('--color-idea').trim(),lit:s.getPropertyValue('--color-lit').trim(),competitor:s.getPropertyValue('--color-competitor').trim(),complement:s.getPropertyValue('--color-complement').trim(),supporting:s.getPropertyValue('--color-supporting').trim()}}
 const DATA=window.__LANDSCAPE_DATA__;
 let graph=null,activeFilters=new Set(['Ideas','Competitor','Complementary','Supporting','Unmarked']);
+
+// Status config: emoji + color
+const STATUS_MAP={
+  Spark:{emoji:'💡',color:'#e67e22',label:'Spark'},
+  Researching:{emoji:'🔍',color:'#3498db',label:'Researching'},
+  Writing:{emoji:'✍️',color:'#9b59b6',label:'Writing'},
+  Experimenting:{emoji:'🧪',color:'#27ae60',label:'Experimenting'},
+  Published:{emoji:'✅',color:'#16a34a',label:'Published'},
+  Abandoned:{emoji:'❌',color:'#94a3b8',label:'Abandoned'}
+};
+function getStatusCfg(s){
+  if(!s)return STATUS_MAP.Spark;
+  const key=Object.keys(STATUS_MAP).find(k=>s.toLowerCase().includes(k.toLowerCase()));
+  return key?STATUS_MAP[key]:STATUS_MAP.Spark;
+}
+
+// --- Ideas & Deep Dives tree ---
+function renderIdeasTree(){
+  const el=document.getElementById('ideas-tree');if(!el)return;
+  const ideas=DATA.nodes.filter(n=>n.type==='idea');
+  if(!ideas.length){el.innerHTML='<div style="font-size:11px;color:var(--text-tertiary);padding:4px 8px">No ideas yet</div>';return}
+  let h='';
+  ideas.forEach(idea=>{
+    const subs=idea.subDocuments||[];
+    const hasSubs=subs.length>0;
+    h+=`<div class="it-idea" data-idea-id="${idea.id}">`;
+    h+=`<span class="it-arrow${hasSubs?'':'" style="visibility:hidden'}">▶</span>`;
+    h+=`<span class="it-title">${idea.title.length>28?idea.title.slice(0,28)+'…':idea.title}</span>`;
+    const st=getStatusCfg(idea.status);
+    h+=`<span class="it-status" style="background:${st.color}22;color:${st.color}">${st.emoji} ${st.label}</span>`;
+    h+=`</div>`;
+    if(hasSubs){
+      h+=`<div class="it-subs" data-parent="${idea.id}">`;
+      subs.forEach(sub=>{
+        h+=`<div class="it-sub" data-idea-id="${idea.id}" data-sub-id="${sub.id}">${sub.topic}</div>`;
+      });
+      h+=`</div>`;
+    }
+  });
+  el.innerHTML=h;
+  // Click handlers
+  el.querySelectorAll('.it-idea').forEach(row=>{
+    row.addEventListener('click',e=>{
+      const ideaId=row.dataset.ideaId;
+      const arrow=row.querySelector('.it-arrow');
+      const subsEl=el.querySelector(`.it-subs[data-parent="${ideaId}"]`);
+      if(subsEl){
+        const isOpen=subsEl.classList.toggle('open');
+        if(arrow)arrow.classList.toggle('open',isOpen);
+      }
+      openIdeaDetail(DATA.nodes.find(n=>n.id===ideaId));
+    });
+  });
+  el.querySelectorAll('.it-sub').forEach(item=>{
+    item.addEventListener('click',e=>{
+      e.stopPropagation();
+      const idea=DATA.nodes.find(n=>n.id===item.dataset.ideaId);
+      const sub=(idea.subDocuments||[]).find(s=>s.id===item.dataset.subId);
+      if(idea&&sub)openSubDocDetail(idea,sub);
+    });
+  });
+}
+
+function openSubDocDetail(idea,sub){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('idea-detail-view').classList.add('active');
+  let h=`<div class="idea-detail-container">`;
+  h+=`<button class="idea-detail-back" onclick="openIdeaDetail(DATA.nodes.find(n=>n.id==='${idea.id}'))">← Back to ${idea.title.length>30?idea.title.slice(0,30)+'…':idea.title}</button>`;
+  h+=`<div class="idea-detail-title">${sub.topic}</div>`;
+  h+=`<div class="idea-detail-status" style="background:var(--accent-dim);color:var(--accent);font-size:10px">from ${idea.title.length>40?idea.title.slice(0,40)+'…':idea.title}</div>`;
+  if(sub.overview)h+=`<div class="idea-detail-section"><h3>Overview</h3><blockquote style="padding:8px 12px;border-left:3px solid var(--accent);background:var(--bg-surface);border-radius:4px;font-size:13px;color:var(--text-secondary);line-height:1.6">${sub.overview}</blockquote></div>`;
+  if(sub.content)h+=`<div class="idea-detail-section"><h3>Content</h3><div class="idea-detail-markdown">${renderMd(sub.content)}</div></div>`;
+  h+=`</div>`;
+  document.getElementById('idea-detail-view').innerHTML=h;
+}
+
+document.addEventListener('DOMContentLoaded',()=>{setTimeout(renderIdeasTree,100)});
 
 function initTheme(){const saved=localStorage.getItem('theme')||'light';document.documentElement.setAttribute('data-theme',saved);updateThemeUI(saved)}
 function toggleTheme(){const cur=document.documentElement.getAttribute('data-theme'),next=cur==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',next);localStorage.setItem('theme',next);updateThemeUI(next);if(graph)updateGraphColors()}
@@ -418,7 +511,7 @@ function focusNode(id){const d=DATA.nodes.find(n=>n.id===id);if(d){if(d.type==='
 function openIdeaDetail(d){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById('idea-detail-view').classList.add('active');
-  const s=d.sections||{};let h=`<div class="idea-detail-container"><button class="idea-detail-back" onclick="backToNetwork()">← Back to Network</button><div class="idea-detail-title">${d.title}</div><div class="idea-detail-status" style="background:var(--accent-dim);color:var(--accent)">${d.status||'spark'}</div>`;
+  const s=d.sections||{};const st=getStatusCfg(d.status);let h=`<div class="idea-detail-container"><button class="idea-detail-back" onclick="backToNetwork()">← Back to Network</button><div class="idea-detail-title">${d.title}</div><div class="idea-detail-status" style="background:${st.color}22;color:${st.color}">${st.emoji} ${st.label}</div>`;
   if(d.researchQuestion)h+=`<div class="idea-detail-section"><h3>Research Question</h3><div class="idea-detail-blockquote">${d.researchQuestion}</div></div>`;
   [['motivation','Motivation'],['innovation','Core Innovation'],['approach','Preliminary Approach'],['feasibility','Feasibility'],['experiments','Expected Experiments'],['nextSteps','Next Steps'],['relatedWork','Related Work']].forEach(([key,label])=>{if(s[key])h+=`<div class="idea-detail-section"><h3>${label}</h3><div class="idea-detail-markdown">${renderMd(s[key])}</div></div>`});
   if(d.targetVenue)h+=`<div class="idea-detail-section"><h3>Target Venue</h3><p style="font-size:13px;color:var(--text-secondary)">${d.targetVenue}</p></div>`;
